@@ -1,23 +1,39 @@
 //your JS code here. If required.
-function manipulateArray(array){
+function processArray(array){
 	return new Promise((resolve,reject)=>{
 		setTimeout(()=>{
-			//Odd Array
-			const filterArray = array.filter((num) => num%2 === 0)
-			setTimeout(()=>{
-			document.getElementById("output").innerText = filterArray.join(",");
-			//multiply num by 2
-			const multiplyArray = filterArray.map((num)=> num*2)
-			setTimeout(()=>{
-			document.getElementById("output").innerText = multiplyArray.join(",");
-			resolve(multiplyArray)
-			},2000)
-			},1000)
+			resolve(array)
 		},3000)
+	})
+	.then((array)=>{
+		const filterArray = array.filter((num)=> num%2===0)
+		return new Promise((resolve,reject)=>{
+			setTimeout(()=>{
+				resolve(filterArray)
+			},1000)
+		})
+	})
+
+	.then((filterArray)=>{
+		const multiplyArray = filterArray.map((num)=>{
+			if(num%2===0){
+				return num*2;
+			}
+			else{
+				return num;
+			}
+		})
+		return new Promise((resolve,reject)=>{
+			setTimeout(()=>{
+				resolve(multiplyArray)
+			},2000)
+		})
+	})
+
+	.then((finalArray)=>{
+		const outputElement = document.getElementById("output")
+		outputElement.innerText = finalArray.join(",")
 	})
 }
 
-
-manipulateArray([1,2,3,4]).then((result)=>{
-	console.log(result)
-})
+processArray([1,2,3,4])
